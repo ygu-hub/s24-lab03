@@ -121,5 +121,63 @@ public class IntQueueTest {
         }
     }
 
+    // Structural tests zone
+    @Test
+    public void test_clear() {
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+        }
+
+        // If I clear the queue, according to the specific implementation of clear method:
+        // mQueue.size() = 0
+        // mQueue.peek() = null
+        // mQueue.dequeue() = null
+        mQueue.clear();
+        assertEquals(0, mQueue.size());
+        assertNull(mQueue.peek());
+        assertNull(mQueue.dequeue());
+    }
+
+    @Test
+    public void test_ensureCapacity_zero_head(){
+        // enqueue method will call on ensureCapacity method.
+        // If I want to increase capacity, according to the specific implementation of ensureCapacity method:
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+            // if size != elementData.length (10): size only increment one time during each enqueue call
+            // and head only points to the 0 index of the queue
+            assertEquals(testList.get(0), mQueue.peek());
+            assertEquals(i + 1, mQueue.size());
+        }
+        
+        // if size == elementData.length: size = size * 2 + 1, and head points to the 0 index of the queue
+        ArrayList<Integer> check_increase_capacity = new ArrayList<>(List.of(4, 5, 6, 7, 8, 9, 10, 11));
+        for(int i = 0; i < check_increase_capacity.size(); i++){
+            mQueue.enqueue(check_increase_capacity.get(i));
+        }
+        assertEquals(testList.get(0), mQueue.peek());
+    }
+
+    @Test
+    public void test_ensureCapacity_non_zero_head(){
+        // enqueue method will call on ensureCapacity method.
+        // If I want to increase capacity, according to the specific implementation of ensureCapacity method:
+        for (int i = 0; i < testList.size(); i++) {
+            mQueue.enqueue(testList.get(i));
+            // if size != elementData.length (10): size only increment one time during each enqueue call
+            // and head only points to the 0 index of the queue
+            assertEquals(testList.get(0), mQueue.peek());
+            assertEquals(i + 1, mQueue.size());
+        }
+        // after deque, head > 0
+        mQueue.dequeue();
+        // if size == elementData.length: size = size * 2 + 1, and head points to the 0 index of the queue
+        ArrayList<Integer> check_increase_capacity = new ArrayList<>(List.of(4, 5, 6, 7, 8, 9, 10, 11, 12));
+        for(int i = 0; i < check_increase_capacity.size(); i++){
+            mQueue.enqueue(check_increase_capacity.get(i));
+        }
+        assertEquals(testList.get(1), mQueue.peek());
+
+    }
 
 }
